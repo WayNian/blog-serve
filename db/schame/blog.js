@@ -16,15 +16,11 @@ const blogSchame = new Schame({
     updateAt: Date,
     //阅读数
     readNum: Number,
-    //标签 [java, JavaScript]
-    tags: Array
-    //评论
-    // comment: {
-    //     type: Array,
-    //     id: {
-
-    //     }
-    // }
+    tags: Array,
+    isDelete: {
+        type: Number,
+        default: 0 //0:未删除   1:删除
+    }
 }, {
     collection: 'blog'
 })
