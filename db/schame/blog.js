@@ -15,7 +15,10 @@ const blogSchame = new Schame({
     },
     updateAt: Date,
     //阅读数
-    readNum: Number,
+    readNum: {
+        type: Number,
+        default: 0
+    },
     tags: Array,
     isDelete: {
         type: Number,
