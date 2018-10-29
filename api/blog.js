@@ -7,13 +7,13 @@ const {
 const router = new Router()
 
 //新增blog
-router.post('/write', async (ctx) => {
+router.post('/write', async (ctx, next) => {
     const Blog = mongoose.model('Blog')
     let newBlog = new Blog(ctx.request.body)
-    await newBlog.save((err, res) => {
-        if (err) return ctx.throw(500)
-        ctx.body = result
+    await newBlog.save(() => {
+        ctx.throw(500)
     })
+    ctx.body = result(0, "", {})
 })
 
 //blog列表
@@ -68,18 +68,18 @@ router.post('/count', async (ctx) => {
 router.post('/hot-list', async (ctx) => {
     const Blog = mongoose.model('Blog')
     await Blog.find((err, res) => {
-        let hotList = res        
+        let hotList = res
         if (err) return ctx.throw(500)
         if (!res.length) {
             ctx.body = result(0, '', {
                 hotList: []
             })
-        } else {      
-            hotList.sort(function(a, b) {
-               return b.readNum - a.readNum
+        } else {
+            hotList.sort(function (a, b) {
+                return b.readNum - a.readNum
             })
             ctx.body = result(0, '', {
-                hotList: hotList.length > 10 ? hotList.slice(0,9) : hotList
+                hotList: hotList.length > 10 ? hotList.slice(0, 9) : hotList
             })
 
         }
