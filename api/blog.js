@@ -40,22 +40,10 @@ router.post('/info', async (ctx) => {
 router.post('/count', async (ctx) => {
     const Blog = mongoose.model('Blog')
     const uuid = ctx.request.body.uuid
-    await Blog.findOne({
-        uuid
-    }, async (err, res) => {
-        if (err) return ctx.throw(500)
-        let readNum = res.readNum + 1
-        await Blog.updateOne({
-            uuid
-        }, {
-            $set: {
-                readNum
-            }
-        }, (err) => {
-            if (err) return ctx.throw(500)
-            ctx.body = result(0, '操作成功', {})
-        })
-    })
+    const readNum = await Blog.findOne({ uuid })
+    let readNumAdded = readNum + 1
+    await Blog.updateOne({ uuid }, { $set: { readNumAdded }})
+    ctx.body = result(0, '操作成功', {})
 })
 
 //热门博客列表
