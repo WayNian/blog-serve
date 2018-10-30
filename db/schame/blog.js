@@ -3,10 +3,7 @@ const uuidv4 = require('uuid/v4');
 const Schame = mongoose.Schema;
 
 const blogSchame = new Schame({
-    uuid: {
-        type: String,
-        default: uuidv4
-    },
+    uuid: String,
     title: String,
     content: String,
     createAt: {

@@ -40,9 +40,9 @@ router.post('/info', async (ctx) => {
 router.post('/count', async (ctx) => {
     const Blog = mongoose.model('Blog')
     const uuid = ctx.request.body.uuid
-    const readNum = await Blog.findOne({ uuid })
-    let readNumAdded = readNum + 1
-    await Blog.updateOne({ uuid }, { $set: { readNumAdded }})
+    const res = await Blog.findOne({ uuid })
+    let readNumAdded = res.readNum + 1
+    await Blog.updateOne({ uuid }, { $set: { readNum: readNumAdded }})
     ctx.body = result(0, '操作成功', {})
 })
 
