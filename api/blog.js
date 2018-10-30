@@ -20,11 +20,9 @@ router.post('/write', async (ctx, next) => {
 router.post('/list', async (ctx) => {
     const Blog = mongoose.model('Blog')
     console.log(ctx.request);
-    await Blog.find((err, res) => {
-        if (err) return ctx.throw(500)
-        ctx.body = result(0, '', {
-            blogList: res
-        })
+    const res = await Blog.find({})
+    ctx.body = result(0, '', {
+        blogList: res
     })
 })
 
@@ -32,13 +30,9 @@ router.post('/list', async (ctx) => {
 router.post('/info', async (ctx) => {
     const Blog = mongoose.model('Blog')
     const uuid = ctx.request.body.uuid
-    await Blog.findOne({
-        uuid
-    }, (err, res) => {
-        if (err) return ctx.throw(500)
-        ctx.body = result(0, '', {
-            blogInfo: res
-        })
+    const res = await Blog.findOne({ uuid })
+    ctx.body = result(0, '', {
+        blogInfo: res
     })
 })
 
@@ -67,23 +61,21 @@ router.post('/count', async (ctx) => {
 //热门博客列表
 router.post('/hot-list', async (ctx) => {
     const Blog = mongoose.model('Blog')
-    await Blog.find((err, res) => {
-        let hotList = res
-        if (err) return ctx.throw(500)
-        if (!res.length) {
-            ctx.body = result(0, '', {
-                hotList: []
-            })
-        } else {
-            hotList.sort(function (a, b) {
-                return b.readNum - a.readNum
-            })
-            ctx.body = result(0, '', {
-                hotList: hotList.length > 10 ? hotList.slice(0, 9) : hotList
-            })
+    const res =  await Blog.find({})
+    let hotList = res
+    if (!res.length) {
+        ctx.body = result(0, '', {
+            hotList: []
+        })
+    } else {
+        hotList.sort((a, b) =>{
+            return b.readNum - a.readNum
+        })
+        ctx.body = result(0, '', {
+            hotList: hotList.length > 10 ? hotList.slice(0, 9) : hotList
+        })
 
-        }
-    })
+    }
 })
 
 module.exports = router
