@@ -29,8 +29,8 @@ router.post('/list', async (ctx) => {
 //blog详情
 router.post('/info', async (ctx) => {
     const Blog = mongoose.model('Blog')
-    const uuid = ctx.request.body.uuid
-    const res = await Blog.findOne({ uuid })
+    const id = ctx.request.body.id
+    const res = await Blog.findOne({ _id: id })
     ctx.body = result(0, '', {
         blogInfo: res
     })
@@ -50,17 +50,17 @@ router.post('/count', async (ctx) => {
 router.post('/hot-list', async (ctx) => {
     const Blog = mongoose.model('Blog')
     const res =  await Blog.find({})
-    let hotList = res
+    let hotBlogList = res
     if (!res.length) {
         ctx.body = result(0, '', {
-            hotList: []
+            hotBlogList: []
         })
     } else {
-        hotList.sort((a, b) =>{
+        hotBlogList.sort((a, b) =>{
             return b.readNum - a.readNum
         })
         ctx.body = result(0, '', {
-            hotList: hotList.length > 10 ? hotList.slice(0, 9) : hotList
+            hotBlogList: hotBlogList.length > 10 ? hotBlogList.slice(0, 9) : hotBlogList
         })
 
     }
