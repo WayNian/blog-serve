@@ -19,7 +19,6 @@ router.post('/write', async (ctx, next) => {
 //blog列表
 router.post('/list', async (ctx) => {
     const Blog = mongoose.model('Blog')
-    console.log(ctx.request);
     const res = await Blog.find({})
     ctx.body = result(0, '', {
         blogList: res
@@ -39,10 +38,11 @@ router.post('/info', async (ctx) => {
 //阅读数统计
 router.post('/count', async (ctx) => {
     const Blog = mongoose.model('Blog')
-    const uuid = ctx.request.body.uuid
-    const res = await Blog.findOne({ uuid })
+    const id = ctx.request.body.id
+    const res = await Blog.findOne({ _id: id })
+    console.log(id, res)
     let readNumAdded = res.readNum + 1
-    await Blog.updateOne({ uuid }, { $set: { readNum: readNumAdded }})
+    await Blog.updateOne({ _id: id }, { $set: { readNum: readNumAdded }})
     ctx.body = result(0, '操作成功', {})
 })
 
